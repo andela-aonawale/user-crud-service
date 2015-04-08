@@ -1,0 +1,38 @@
+{
+  "name": "user-crud-service",
+  "version": "1.0.0",
+  "description": "User API",
+  "main": "server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andela-aonawale/user-crud-service.git"
+  },
+  "keywords": [
+    "user",
+    "crud",
+    "service"
+  ],
+  "author": "Ahmed Onawale",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andela-aonawale/user-crud-service/issues"
+  },
+  "homepage": "https://github.com/andela-aonawale/user-crud-service",
+  "dependencies": {
+    "body-parser": "^1.12.2",
+    "bookshelf": "^0.7.9",
+    "express": "^4.12.3",
+    "knex": "^0.7.6",
+    "pg": "^4.3.0"
+  },
+  "devDependencies": {
+    "jasmine-node": "^1.14.5"
+  }
+}
