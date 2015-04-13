@@ -1,40 +1,42 @@
-var User = require('../models/model')[0];
+var User = require('../models/user.model')[1];
 module.exports = {
 
 	// get all users
 	getAllUser: function(req, res){
 		User.fetchAll().then(function(model){
-			res.send(model.toJSON());
+			res.json(model);
 		});
 	},
 
 	// get a single user
 	getOneUser: function(req, res){
-		User({username: req.params.username}).fetch().then(function(model){
-			res.send(model.toJSON());
+		new User({username: req.params.username}).fetch().then(function(model){
+			res.json(model);
 		});
 	},
 
 	// create a new user
 	createUser: function(req, res){
-		User.forge(req).save().then(function(){
-			res.send("New User Created").toJSON();
+		User.forge(req.body).save().then(function(model){
+			res.json({message: "New User Created"});
 		});
 	},
 
 	// update a user
 	updateUser: function(req, res){
-		User({username: req.params.username}).fetch().then(function(model){
-			model().save(req, {patch: true}).then(function(){
-				res.send("User Updated").toJSON();
-			});
+		new User({username: req.body.oldname}).fetch().then(function(model){
+			delete req.body.oldname;
+			model.save(req.body, {patch: true}).then(function(){
+				res.json({message: "User Updated"});
+			});			
 		});
 	},
 
 	// delete a user
 	deleteUser: function(req, res){
-		User({username: req.params.username}).fetch().then(function(model){
+		new User({'username': req.params.username}).fetch().then(function(model){
 			model.destroy();
+			res.json({message: "User Deleted"});
 		});
 	}
 
