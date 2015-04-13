@@ -1,5 +1,5 @@
-var config = require('../../config/config');
-var knex = require('../../config/postgresql');
+var config = require('../../../config/config');
+var knex = require('../../../config/postgresql')();
 var bookshelf = require('bookshelf')(knex);
 
 bookshelf.knex.schema.hasTable(config.db[process.env.NODE_ENV].name).then(function(exists){
@@ -10,8 +10,9 @@ bookshelf.knex.schema.hasTable(config.db[process.env.NODE_ENV].name).then(functi
 			t.string('lastname');
 			t.string('username').notNullable();
 			t.string('password').notNullable();
-			t.string('email');
+			t.string('email').notNullable();
 			t.boolean('admin').defaultTo(false);
+			t.string('token');
 			t.timestamps();
 		})
 		.then(function(){
@@ -21,7 +22,7 @@ bookshelf.knex.schema.hasTable(config.db[process.env.NODE_ENV].name).then(functi
 });
 
 var User = bookshelf.Model.extend({
-	tableName: 'users',
+	tableName: config.db[process.env.NODE_ENV].name,
 	hasTimestamps: true
 });
 
