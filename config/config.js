@@ -11,7 +11,8 @@ module.exports = {
 				database: 'userdb',
 				charset: 'utf8'
 			},
-			name: 'users'
+			name: 'users',
+			secret: 'ammyreal'
 		},
 
 		test: {
@@ -20,13 +21,16 @@ module.exports = {
 				port: '5432',
 				user: 'ahmed',
 				password: 'pr0t0c0l',
-				database: 'userdb',
+				database: 'testdb',
 				charset: 'utf8'
 			},
-			name: 'test'
+			name: 'test',
+			secret: 'ammyreal'
 		}
 
-	}
+	},
+
+	port: process.env.PORT || 8000
 	
 }
 
