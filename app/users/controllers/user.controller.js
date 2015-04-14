@@ -22,16 +22,19 @@ module.exports = {
 
 	// create a new user
 	createUser: function(req, res){
-		if(!req.body.username && !req.body.email){
-			token = jwt.sign({username: req.body.username, email: req.body.email}, secret);
-			req.body.token = token;
-			req.body.password = crypto(req.body.password);
-			User.forge(req.body).save().then(function(model){
-				res.json({message: "User Created", "token": model.attributes.token});
-			});
-		}else{
-			res.json({message: "Username or Email already exist"});
-		}
+		new User({username: req.body.username}).fetch()
+		.then(function(model){
+			if(!model){
+				token = jwt.sign({username: req.body.username, email: req.body.email}, secret);
+				req.body.token = token;
+				req.body.password = crypto(req.body.password);
+				User.forge(req.body).save().then(function(model){
+					res.json({message: "User Created", "token": model.attributes.token});
+				});
+			}else{
+				res.json({message: "Username or Email already exist"});
+			}
+		});		
 	},
 
 	// signIn to user account
