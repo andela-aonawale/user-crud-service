@@ -38,34 +38,50 @@ module.exports = {
 	signInUser: function(req, res){
 		new User({username: req.body.username, password: crypto(req.body.password)})
 		.fetch().then(function(model){
-			res.json({message: "User Logged in", token: model.attributes.token});
+			if(model){
+				res.json({message: "User Logged in", token: model.attributes.token});
+			}else{
+				res.json({message: "User doesn't exist"});
+			}	
 		});
 	},
 
 	// signOut from user account
 	signOutUser: function(req, res){
 		new User({username: req.body.username}).fetch().then(function(model){
-			model.set({"token": ""});
-			model.save();
-			res.json({message: "User Logged Out"});
+			if(model){
+				model.set({"token": ""});
+				model.save();
+				res.json({message: "User Logged Out"});
+			}else{
+				res.json({message: "User doesn't exist"});
+			}
 		});
 	},
 
 	// update a user
 	updateUser: function(req, res){
 		new User({username: req.body.oldname}).fetch().then(function(model){
-			delete req.body.oldname;
-			model.save(req.body, {patch: true}).then(function(){
-				res.json({message: "User Updated"});
-			});			
+			if(model){
+				delete req.body.oldname;
+				model.save(req.body, {patch: true}).then(function(){
+					res.json({message: "User Updated"});
+				});
+			}else{
+				res.json({message: "User doesn't exist"});
+			}		
 		});
 	},
 
 	// delete a user
 	deleteUser: function(req, res){
 		new User({'username': req.body.username}).fetch().then(function(model){
-			model.destroy();
-			res.json({message: "User Deleted"});
+			if(model){
+				model.destroy();
+				res.json({message: "User Deleted"});
+			}else{
+				res.json({message: "User doesn't exist"});
+			}
 		});
 	}
 
