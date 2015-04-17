@@ -2,7 +2,7 @@ module.exports = {
 
 	db: {
 
-		user: {
+		production: {
 			connection: {
 				host: 'ec2-54-221-249-3.compute-1.amazonaws.com',
 				port: '5432',
@@ -13,6 +13,19 @@ module.exports = {
 			},
 			name: 'user',
 			secret: '@ammyreal'
+		},
+
+		development: {
+			connection: {
+				host: 'localhost',
+				port: '5432',
+				user: 'ahmed',
+				password: 'pr0t0c0l',
+				database: 'testdb',
+				charset: 'utf8'
+			},
+			name: 'user',
+			secret: 'ammyreal'
 		},
 
 		test: {
