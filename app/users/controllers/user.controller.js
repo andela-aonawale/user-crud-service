@@ -16,7 +16,11 @@ module.exports = {
 	// get a single user
 	getOneUser: function(req, res){
 		new User({username: req.params.username}).fetch().then(function(model){
-			res.json(model);
+			if(model){
+				res.json(model);
+			}else{
+				res.json({message: "User not found"});
+			}
 		});
 	},
 
@@ -25,14 +29,16 @@ module.exports = {
 		new User({username: req.body.username}).fetch()
 		.then(function(model){
 			if(!model){
-				token = jwt.sign({username: req.body.username, email: req.body.email}, secret);
+				token = jwt.sign({username: req.body.username, password: req.body.email}, secret);
 				req.body.token = token;
 				req.body.password = crypto(req.body.password);
 				User.forge(req.body).save().then(function(model){
 					res.json({message: "User Created", "token": model.attributes.token});
 				});
-			}else{
-				res.json({message: "Username or Email already exist"});
+			}else if(model){
+				model.attributes.email === req.body.email ? 
+				res.json({message: "Email is associated with another account"}) :
+				res.json({message: "Username is unavailable"});
 			}
 		});		
 	},
@@ -42,7 +48,11 @@ module.exports = {
 		new User({username: req.body.username, password: crypto(req.body.password)})
 		.fetch().then(function(model){
 			if(model){
-				res.json({message: "User Logged in", token: model.attributes.token});
+				token = jwt.sign({username: req.body.username, password: req.body.email}, secret);
+				req.body.token = token;
+				model.set({"token": token});
+				model.save();
+				res.json({message: "User Logged in", token: token});
 			}else{
 				res.json({message: "User doesn't exist"});
 			}	
@@ -51,7 +61,7 @@ module.exports = {
 
 	// signOut from user account
 	signOutUser: function(req, res){
-		new User({username: req.body.username}).fetch().then(function(model){
+		new User({username: req.params.username}).fetch().then(function(model){
 			if(model){
 				model.set({"token": ""});
 				model.save();
@@ -64,9 +74,8 @@ module.exports = {
 
 	// update a user
 	updateUser: function(req, res){
-		new User({username: req.body.oldname}).fetch().then(function(model){
+		new User({username: req.params.username}).fetch().then(function(model){
 			if(model){
-				delete req.body.oldname;
 				model.save(req.body, {patch: true}).then(function(){
 					res.json({message: "User Updated"});
 				});
@@ -78,7 +87,7 @@ module.exports = {
 
 	// delete a user
 	deleteUser: function(req, res){
-		new User({'username': req.body.username}).fetch().then(function(model){
+		new User({'username': req.params.username}).fetch().then(function(model){
 			if(model){
 				model.destroy();
 				res.json({message: "User Deleted"});
