@@ -54,7 +54,7 @@ module.exports = {
 				model.save();
 				res.json({message: "User Logged in", token: token});
 			}else{
-				res.json({message: "User doesn't exist"});
+				res.json({message: "Invalid username or password"});
 			}	
 		});
 	},
