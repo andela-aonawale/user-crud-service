@@ -9,4 +9,6 @@ module.exports = function(router){
 	.put(users.updateUser)
 	.delete(users.deleteUser)
 	.post(users.signOutUser);
+
+	router.route("/decode").post(users.decodeUser);
 };
