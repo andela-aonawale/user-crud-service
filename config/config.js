@@ -21,7 +21,7 @@ module.exports = {
 				port: '5432',
 				user: 'ahmed',
 				password: 'pr0t0c0l',
-				database: 'testdb',
+				database: 'userdb',
 				charset: 'utf8'
 			},
 			name: 'user',
@@ -43,7 +43,7 @@ module.exports = {
 
 	},
 
-	port: process.env.PORT || 8000
+	port: process.env.PORT || 8111
 	
 }
 
