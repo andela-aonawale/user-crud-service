@@ -6,6 +6,17 @@ var token;
 
 module.exports = {
 
+	decodeUser: function(req, res){
+		jwt.verify(req.body.token, secret, function(err, decoded) {
+			if(err){
+				res.json({message: "token / secret error"});
+			}else{
+				console.log(decoded);
+				res.json({username: decoded});
+			}
+		});
+	},
+
 	// get all users
 	getAllUser: function(req, res){
 		User.fetchAll().then(function(model){
@@ -29,7 +40,7 @@ module.exports = {
 		new User({username: req.body.username}).fetch()
 		.then(function(model){
 			if(!model){
-				token = jwt.sign({username: req.body.username, password: req.body.email}, secret);
+				token = jwt.sign({username: req.body.username, email: req.body.email}, secret);
 				req.body.token = token;
 				req.body.password = crypto(req.body.password);
 				User.forge(req.body).save().then(function(model){
@@ -48,13 +59,13 @@ module.exports = {
 		new User({username: req.body.username, password: crypto(req.body.password)})
 		.fetch().then(function(model){
 			if(model){
-				token = jwt.sign({username: req.body.username, password: req.body.email}, secret);
+				token = jwt.sign({username: req.body.username, email: req.body.email}, secret);
 				req.body.token = token;
 				model.set({"token": token});
 				model.save();
 				res.json({message: "User Logged in", token: token});
 			}else{
-				res.json({message: "Invalid username or password"});
+				res.json({message: "Invalid username / password"});
 			}	
 		});
 	},
