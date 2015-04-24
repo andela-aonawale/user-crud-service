@@ -46,10 +46,10 @@ module.exports = {
 				if(!req.body.username || !req.body.password || !req.body.email){
 					res.json({message: "Username, Password and email fields are required"});
 				}else{
-					token = jwt.sign({username: req.body.username, email: req.body.email}, secret);
+					token = jwt.sign({username: req.body.username, password: req.body.password}, secret);
 					req.body.password = crypto(req.body.password);
 					User.forge(req.body).save().then(function(model){
-						res.json({message: "User Created", "token": token});
+						res.json({message: "Account Created Successfully", "token": token});
 					});
 				}
 			}else if(model){
@@ -65,7 +65,7 @@ module.exports = {
 		new User({username: req.body.username, password: crypto(req.body.password)})
 		.fetch().then(function(model){
 			if(model){
-				token = jwt.sign({username: req.body.username, email: req.body.email}, secret);
+				token = jwt.sign({username: req.body.username, password: req.body.password}, secret);
 				res.json({message: "User Logged in", token: token});
 			}else{
 				res.json({message: "Invalid username / password"});
@@ -90,7 +90,7 @@ module.exports = {
 	updateUser: function(req, res){
 		new User({username: req.params.username}).fetch().then(function(model){
 			if(model){
-				token = jwt.sign({username: req.body.username, email: req.body.email}, secret);
+				token = jwt.sign({username: req.body.username, password: req.body.password}, secret);
 				req.body.password = crypto(req.body.password);
 				model.save(req.body, {patch: true}).then(function(){
 					res.json({message: "User Updated", token: token});
@@ -106,7 +106,7 @@ module.exports = {
 		new User({'username': req.params.username}).fetch().then(function(model){
 			if(model){
 				model.destroy();
-				res.json({message: "User Deleted"});
+				res.json({message: "Account Deleted"});
 			}else{
 				res.json({message: "User doesn't exist"});
 			}
