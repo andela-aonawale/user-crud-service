@@ -11,7 +11,7 @@ module.exports = {
 				database: 'ddnbiadjc5oll8',
 				charset: 'utf8'
 			},
-			name: 'user',
+			name: 'userstable',
 			secret: '@ammyreal'
 		},
 
@@ -24,7 +24,7 @@ module.exports = {
 				database: 'userdb',
 				charset: 'utf8'
 			},
-			name: 'user',
+			name: 'userstable',
 			secret: 'ammyreal'
 		},
 
